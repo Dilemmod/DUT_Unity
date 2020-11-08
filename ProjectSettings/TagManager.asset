@@ -15,9 +15,9 @@ TagManager:
   - 
   - Ground
   - Player
-  - 
-  - 
-  - 
+  - Items
+  - Platforms
+  - Traps
   - 
   - 
   - 
@@ -64,7 +64,7 @@ TagManager:
     locked: 1
   - name: Background_7
     uniqueID: 83727523
-    locked: 1
+    locked: 0
   - name: Background_8
     uniqueID: 435278739
     locked: 0
@@ -73,4 +73,10 @@ TagManager:
     locked: 0
   - name: Player
     uniqueID: 1112531193
+    locked: 0
+  - name: Traps
+    uniqueID: 2025190815
+    locked: 0
+  - name: Ground
+    uniqueID: 1836182091
     locked: 0
