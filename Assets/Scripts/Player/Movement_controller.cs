@@ -55,6 +55,7 @@ public class Movement_controller : MonoBehaviour
     [SerializeField] private int powerStrikeCost;
     public float MaxChargeTime => maxChargeTime;
     private float holdTime=0;
+    private bool died=false;
 
     void Start()
     {
@@ -83,7 +84,7 @@ public class Movement_controller : MonoBehaviour
     public void Move(float move, bool jump, bool roll)
     {
         #region Movement
-        if (move != 0 && grounded && canRoll&& !isCasting&&!isStrike)
+        if (move != 0 && grounded && canRoll&& !isCasting&&!isStrike&& !died)
             playerRB.velocity = new Vector2(speed * move, playerRB.velocity.y);
 
         if (move > 0 && !faceRight)
@@ -195,4 +196,9 @@ public class Movement_controller : MonoBehaviour
         isStrike = false;
     }
     #endregion
+    public void OnDeath()
+    {
+        died = true;
+        Destroy(gameObject);
+    }
 }
