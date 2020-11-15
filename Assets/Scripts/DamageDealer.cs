@@ -17,7 +17,7 @@ public class DamageDealer : MonoBehaviour
         lastCounter = DateTime.Now;
         player = info.GetComponent<PlayerController>();
         if (player != null)
-            player.ChangeHp(-demage);
+            player.ChangeHP(-demage);
     }
     private void OnTriggerExit2D(Collider2D info)
     {
@@ -27,8 +27,8 @@ public class DamageDealer : MonoBehaviour
     private void Update()
     {
         if (player != null && (DateTime.Now - lastCounter).TotalSeconds > timeDelay)
-        {
-            player.ChangeHp(-demage);
+        { 
+            player.ChangeHP(-demage);
             lastCounter = DateTime.Now;
         }
     }

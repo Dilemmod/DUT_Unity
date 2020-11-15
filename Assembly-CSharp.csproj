@@ -68,11 +68,13 @@
     <Compile Include="Assets\Imports\Hero Knight - Pixel Art\Demo\HeroKnight.cs" />
     <Compile Include="Assets\Imports\Hero Knight - Pixel Art\Demo\Sensor_HeroKnight.cs" />
     <Compile Include="Assets\Scripts\DamageDealer.cs" />
+    <Compile Include="Assets\Scripts\EnemiesController.cs" />
     <Compile Include="Assets\Scripts\ItemPicker.cs" />
     <Compile Include="Assets\Scripts\MoveBackground.cs" />
     <Compile Include="Assets\Scripts\Player\Movement_controller.cs" />
     <Compile Include="Assets\Scripts\Player\PC_InputController.cs" />
     <Compile Include="Assets\Scripts\Player\PlayerController.cs" />
+    <Compile Include="Assets\Scripts\ProjectileController.cs" />
     <Compile Include="Assets\Scripts\VerticalMiover.cs" />
     <None Include="Assets\Imports\Free Pixel Art Forest\Contact.txt" />
     <None Include="Assets\Imports\Free Pixel Art Forest\Lisense.txt" />

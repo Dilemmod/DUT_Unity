@@ -7,7 +7,7 @@ public class ItemPicker : MonoBehaviour
     [SerializeField] private int healValue;
     private void OnTriggerEnter2D(Collider2D info)
     {
-        info.GetComponent<PlayerController>().ChangeHp(healValue);
+        info.GetComponent<PlayerController>().ChangeHP(healValue);
         Destroy(gameObject);
     }
 }
