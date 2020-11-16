@@ -51,13 +51,12 @@ public class PlayerController : MonoBehaviour
         if (currentHP > maxHP)
             currentHP = maxHP;
         else if (currentHP <= 0)
-            playerAnimator.SetTrigger("Died");
+            //playerAnimator.SetTrigger("Died");
         Debug.Log("HP = " + currentHP);
 
     }
     public bool ChangeSP(int value)
     {
-        //Debug.Log("Stamina Value = " + value);
         if (value < 0 && currentSP < Mathf.Abs(value))
             return false;
         currentSP += value;

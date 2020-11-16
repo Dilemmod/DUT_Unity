@@ -8,7 +8,7 @@ using UnityEngine;
 [RequireComponent(typeof(Rigidbody2D), typeof(Animator))]
 public class Movement_controller : MonoBehaviour
 {
-    private Rigidbody2D playerRB;
+    private  Rigidbody2D playerRB;
     private Animator playerAnimator;
     private PlayerController playerController;
 
@@ -106,6 +106,8 @@ public class Movement_controller : MonoBehaviour
         if (roll && canRoll && grounded)
         {
             canRoll = false;
+            Physics2D.IgnoreLayerCollision(9, 12);
+            Physics2D.IgnoreLayerCollision(9,10);
             playerRB.velocity = new Vector2((faceRight == true ? 1 : -1) * 4.0f, playerRB.velocity.y);
             topPlayerCollider.enabled = false;
         }
@@ -124,6 +126,8 @@ public class Movement_controller : MonoBehaviour
     #region EndAnimation
     private void EndRoll()
     {
+        Physics2D.IgnoreLayerCollision(9, 12, false);
+        Physics2D.IgnoreLayerCollision(9, 10,false);
         canRoll = true;
     }
     #endregion

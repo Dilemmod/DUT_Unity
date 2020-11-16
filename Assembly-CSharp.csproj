@@ -70,8 +70,10 @@
     <Compile Include="Assets\Scripts\Enemies\DamageDealer.cs" />
     <Compile Include="Assets\Scripts\Enemies\EnemiesController.cs" />
     <Compile Include="Assets\Scripts\Enemies\EnemyArcherController.cs" />
+    <Compile Include="Assets\Scripts\Enemies\EnemyBossController.cs" />
     <Compile Include="Assets\Scripts\Enemies\EnemyControllerBase.cs" />
     <Compile Include="Assets\Scripts\Enemies\EnemyMushroomController.cs" />
+    <Compile Include="Assets\Scripts\Enemies\EnemyProjectileController.cs" />
     <Compile Include="Assets\Scripts\Enemies\Traps\VerticalMiover.cs" />
     <Compile Include="Assets\Scripts\Items\ItemPicker.cs" />
     <Compile Include="Assets\Scripts\Player\MoveBackground.cs" />

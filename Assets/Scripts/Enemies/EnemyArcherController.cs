@@ -21,6 +21,12 @@ public class EnemyArcherController : EnemyControllerBase
         player = FindObjectOfType<PlayerController>();
         StartCoroutine(ScanForPlayer());
     }
+    protected override void ResetState()
+    {
+        base.ResetState();
+        enemyAnimator.SetBool(EnemyState.Shoot.ToString(), false);
+        enemyAnimator.SetBool(EnemyState.Hurt.ToString(), false);
+    }
     protected override void Update()
     {
         if (isAngry)
@@ -32,7 +38,7 @@ public class EnemyArcherController : EnemyControllerBase
         GameObject arrow = Instantiate(projectilePrefab, shootPoint.position, Quaternion.identity);
         arrow.GetComponent<Rigidbody2D>().velocity = transform.right * arrowSpeed;
         arrow.GetComponent<SpriteRenderer>().flipX = !faceRight;
-        Destroy(arrow, 5f);
+        Destroy(arrow, 1f);
     }
     protected IEnumerator ScanForPlayer()
     {
@@ -43,7 +49,7 @@ public class EnemyArcherController : EnemyControllerBase
         }
 
     }
-    protected void CheckPlayerInRange()
+    protected virtual void CheckPlayerInRange()
     {
         if (player == null|| attacking)
             return;
@@ -86,7 +92,7 @@ public class EnemyArcherController : EnemyControllerBase
                 break;
         }
     }
-    protected void EndState()
+    protected virtual void EndState()
     {
         switch (currentState)
         {
@@ -97,7 +103,7 @@ public class EnemyArcherController : EnemyControllerBase
         if (isAngry)
             ChangeState(EnemyState.Idle);
     }
-    protected void DoStateAction()
+    protected virtual void DoStateAction()
     {
         switch (currentState)
         {

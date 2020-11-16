@@ -9,17 +9,19 @@ public class MoveBackground : MonoBehaviour
 	[SerializeField] private Rigidbody2D playerRB;
 	[SerializeField] private float speed;
 	private float ObjectPositionX;
-	[SerializeField] private float playerPositionX;
-	[SerializeField] private float playerPositionX2;
-	[SerializeField] private float playerDirectionSpeed;
+	private float playerPositionX;
+	private float playerDirectionSpeed;
 	private float DestPoint = -8.56f;
 	private float RightRespownPoint = 9f;
 	private float LeftRespownPoint = -9f;
 
 
+    private void Start()
+    {
+		transform.position = new Vector2(transform.position.x + playerRB.transform.position.x, transform.position.y);
+	}
 
-
-	void Update()
+    void Update()
 	{
 		playerDirectionSpeed = playerRB.velocity.x;
 		ObjectPositionX = transform.position.x;

@@ -28,6 +28,12 @@ public abstract class EnemyControllerBase : MonoBehaviour
     protected EnemyState _currentState;
     protected float lastStateChange;
     protected float timeToNextChange;
+    /*
+    [Header("Damage dealer")]
+    [SerializeField] private DamageType collisionDamageType;
+    [SerializeField] protected int collisionDamage;
+    [SerializeField] protected float collisionTimeDelay;*/
+    private float lastDamageTime;
 
     #region UnityMethods
     protected virtual void Start()
@@ -54,6 +60,11 @@ public abstract class EnemyControllerBase : MonoBehaviour
     protected virtual void OnDrawGizmos()
     {
         Gizmos.DrawWireCube(transform.position, new Vector3(range * 2, 0.5f, 0));
+    }
+    protected virtual void ResetState()
+    {
+        enemyAnimator.SetBool(EnemyState.Move.ToString(), false);
+        enemyAnimator.SetBool(EnemyState.Death.ToString(), false);
     }
     protected void GetRandomState()
     {
@@ -85,7 +96,7 @@ public abstract class EnemyControllerBase : MonoBehaviour
     {
         Destroy(gameObject);
     }
-
+    
     protected virtual void Move()
     {
         enemyRb.velocity = transform.right * new Vector2(speed, enemyRb.velocity.y);
