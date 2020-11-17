@@ -7,6 +7,9 @@ using UnityEngine.Assertions.Must;
 
 public class EnemyBossController : EnemyArcherController
 {
+    [Header("Other")]
+    [SerializeField] private SpriteRenderer enemySpryte;
+    protected bool inRage;
     [Header("Strike")]
     [SerializeField] private Transform strikePoint;
     [SerializeField] private int strikeDamage;
@@ -26,9 +29,14 @@ public class EnemyBossController : EnemyArcherController
     private bool fightStarted;
 
     private EnemyState stateOnHold;
-    private EnemyState[] attackStates = { EnemyState.Strike, EnemyState.PowerStrike, EnemyState.Shoot};
-    
+    protected List<EnemyState> attackStates = new List<EnemyState>();
+
     #region UnityMethods
+    protected override void Start()
+    {
+        base.Start();
+        AttackStates();
+    }
     protected override void FixedUpdate()
     {
         base.FixedUpdate();
@@ -38,6 +46,7 @@ public class EnemyBossController : EnemyArcherController
             if (CanAttack())
                 ChangeState(stateOnHold);
         }
+
     }
     protected override void OnDrawGizmos()
     {
@@ -45,13 +54,18 @@ public class EnemyBossController : EnemyArcherController
         Gizmos.color = Color.red;
         Gizmos.DrawWireCube(strikePoint.position, new Vector3(strikeRange, strikeRange, 0));
     }
+    protected virtual void AttackStates()
+    {
+        attackStates.Add(EnemyState.Strike);
+        attackStates.Add(EnemyState.PowerStrike);
+        attackStates.Add(EnemyState.Shoot);
+    }
     #endregion
     #region State
     protected override void ChangeState(EnemyState state)
     {
         if (currentState == state)
             return;
-        //currentState
         switch (state)
         {
             case EnemyState.PowerStrike:
@@ -63,14 +77,13 @@ public class EnemyBossController : EnemyArcherController
                 {
                     stateOnHold = state;
                     state = EnemyState.Move;
-                    //enemyAnimator.SetBool(currentState.ToString(), false);
-                    //ChangeState(EnemyState.Move);
                 }
                 break;
-            case EnemyState.Hurt:
+            case EnemyState.Hit:
                 attacking = false;
+                enemyAnimator.SetTrigger("Hit");
                 enemyRb.velocity = Vector2.zero;
-                StopAllCoroutines();
+               // StopAllCoroutines();
                 break;
         }
         base.ChangeState(state);
@@ -106,14 +119,11 @@ public class EnemyBossController : EnemyArcherController
             case EnemyState.Strike:
                 attacking = false;
                 break;
-            case EnemyState.Hurt:
+            case EnemyState.Hit:
                 fightStarted = false;
                 break;
         }
-       // if (currentState == EnemyState.Shoot || currentState == EnemyState.PowerStrike || currentState == EnemyState.Strike || currentState == EnemyState.Hurt)
-       // {
             StartCoroutine(BeginNewCircle());
-      //  }
     }
     #endregion
     #region StateMetods
@@ -135,7 +145,7 @@ public class EnemyBossController : EnemyArcherController
         }
     }
 
-    protected void StrikeWithPower() 
+    protected virtual void StrikeWithPower() 
     {
         strikeCollider.enabled = true;
         enemyRb.velocity = transform.right * powerStrikeSpeed;
@@ -173,7 +183,6 @@ public class EnemyBossController : EnemyArcherController
     }
     protected override void CheckPlayerInRange()
     {
-        //if (player == null || isAngry)
         if (player == null || isAngry)
             return;
 
@@ -191,41 +200,28 @@ public class EnemyBossController : EnemyArcherController
     }
     protected void ChooseNextAttackState()
     {
-        int state = Random.Range(0, attackStates.Length);
+        int state = Random.Range(0, attackStates.Count);
         ChangeState(attackStates[state]);
     }
     #endregion
-    /*
-public override void TakeDamage(int damage, DamageType type = DamageType.Casual, Transform palyer = null)
-{
-    if (currentState == EnemyState.PowerStrike && type != DamageType.Projectile || currentState == EnemyState.Hurt)
-        return;
-
-    base.TakeDamage(damage, type, palyer);
-
-    if (currentHp <= maxHp / 2 && !inRage)
+    public override void TakeDamage(int damage)
     {
-        inRage = true;
-        ChangeState(EnemyState.Hurt);
+        base.TakeDamage(damage);
+        if (currentHp <= maxHp / 2 && !inRage)
+        {
+            inRage = true;
+            powerStrikeRange = 10;
+            waitTime = 0.3f;
+            enemySpryte.color = Color.red;
+            ChangeState(EnemyState.Hit);
+        }
+    }
+    protected override void onDeath()
+    {
+        if(inRage)
+        enemySpryte.color = Color.white;
+        base.onDeath();
     }
 
-}*/
-
-    /*
-protected override void TryToDamage(Collider2D enemy)
-{
-    if (currentState == EnemyState.Idle || currentState == EnemyState.Shoot || currentState == EnemyState.Hurt)
-        return;
-
-    base.TryToDamage(enemy);
-}
-*/
-    /*
-protected override void ResetState()
-{
-    base.ResetState();
-    enemyAnimator.SetBool(EnemyState.PowerStrike.ToString(), false);
-    enemyAnimator.SetBool(EnemyState.Strike.ToString(), false);
-}*/
 
 }

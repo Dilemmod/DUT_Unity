@@ -12,6 +12,11 @@ public abstract class EnemyControllerBase : MonoBehaviour
     protected Animator enemyAnimator;
     protected EnemyState currentState;
     //[SerializeField] protected Collider2D enemyCollider;
+    [Header("HP")]
+    [SerializeField] protected int maxHp;
+    [SerializeField] protected Canvas canvas; 
+    [SerializeField] protected Slider hpSlider;
+    protected int currentHp;
 
     [Header("Movement")]
     [SerializeField] private float speed;
@@ -25,7 +30,6 @@ public abstract class EnemyControllerBase : MonoBehaviour
     [SerializeField] private float maxStateTime;
     [SerializeField] private float minStateTime;
     [SerializeField] private EnemyState[] availableState;
-    protected EnemyState _currentState;
     protected float lastStateChange;
     protected float timeToNextChange;
     
@@ -41,6 +45,10 @@ public abstract class EnemyControllerBase : MonoBehaviour
         startPoint = transform.position;
         enemyRb = GetComponent<Rigidbody2D>();
         enemyAnimator = GetComponent<Animator>();
+        currentHp = maxHp;
+        hpSlider.maxValue = maxHp;
+        hpSlider.value = maxHp;
+
     }
     protected virtual void Update()
     {
@@ -50,6 +58,24 @@ public abstract class EnemyControllerBase : MonoBehaviour
     protected virtual void OnCollisionEnter2D(Collision2D collision)
     {
         TryToDamage(collision.collider);
+    }
+    public virtual void TakeDamage(int damage)
+    {
+        if (currentState == EnemyState.Death)
+            return;
+
+        currentHp -= damage;
+        ChangeState(EnemyState.Hit);
+        if(hpSlider!=null)
+        hpSlider.value = currentHp;
+        Debug.Log(String.Format("Enemy {0} take damage {1} and his currentHp = {2}", gameObject, damage, currentHp));
+        if (currentHp <= 0)
+        {
+            currentHp = 0;
+            if(canvas!=null)
+                Destroy(canvas,1f);
+            ChangeState(EnemyState.Death);
+        }
     }
     protected virtual void TryToDamage(Collider2D enemy)
     {
@@ -80,7 +106,6 @@ public abstract class EnemyControllerBase : MonoBehaviour
     }
     protected void GetRandomState()
     {
-        
         if (currentState == EnemyState.Death)
             return;
         
@@ -95,20 +120,39 @@ public abstract class EnemyControllerBase : MonoBehaviour
     }
     protected virtual void ChangeState(EnemyState state)
     {
-        if(currentState!=EnemyState.Idle)
+        if (currentState == EnemyState.Death)
+            return;
+        ResetState();   
+        if (currentState!=EnemyState.Idle)
             enemyAnimator.SetBool(currentState.ToString(), false);
         if (state != EnemyState.Idle)
             enemyAnimator.SetBool(state.ToString(),true);
         currentState = state;
         lastStateChange = Time.time;
 
+        switch (currentState)
+        {
+            case EnemyState.Idle:
+                enemyRb.velocity = Vector2.zero;
+                break;
+            case EnemyState.Death:
+                enemyAnimator.SetTrigger("Death");
+                enemyRb.velocity = Vector2.zero;
+                break;
+            case EnemyState.Hit:
+                enemyAnimator.SetTrigger("Hit");
+                enemyRb.velocity = Vector2.zero;
+                //StopAllCoroutines();
+                break;
+        }
+    }
+    protected virtual void onDeath()
+    {
+        enemyAnimator.enabled = false;
+        enemyRb.bodyType = RigidbodyType2D.Static;
+        GetComponent<Collider2D>().enabled = false;
     }
 
-    public virtual void OnDeath()
-    {
-        Destroy(gameObject);
-    }
-    
     protected virtual void Move()
     {
         enemyRb.velocity = transform.right * new Vector2(speed, enemyRb.velocity.y);
@@ -118,6 +162,8 @@ public abstract class EnemyControllerBase : MonoBehaviour
     {
         faceRight = !faceRight;
         transform.Rotate(0, 180, 0);
+        if(canvas!=null)
+        canvas.transform.Rotate(0,180,0);
     }
 
     private bool IsGroundEnding()
@@ -134,7 +180,7 @@ public enum EnemyState
     Shoot,
     Strike,
     PowerStrike,
-    Hurt,
+    Hit,
     Death,
 }
 

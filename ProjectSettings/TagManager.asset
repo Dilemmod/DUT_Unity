@@ -43,22 +43,22 @@ TagManager:
     locked: 0
   - name: Background_0
     uniqueID: 1876010121
-    locked: 1
+    locked: 0
   - name: Background_1
     uniqueID: 1269014777
-    locked: 1
+    locked: 0
   - name: Background_2
     uniqueID: 4281982419
-    locked: 1
+    locked: 0
   - name: Background_3
     uniqueID: 2736312421
-    locked: 1
+    locked: 0
   - name: Background_4
     uniqueID: 3998557337
-    locked: 1
+    locked: 0
   - name: Background_5
     uniqueID: 663602997
-    locked: 1
+    locked: 0
   - name: Background_6
     uniqueID: 3071704603
     locked: 1

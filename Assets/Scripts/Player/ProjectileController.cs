@@ -7,7 +7,7 @@ public class ProjectileController : MonoBehaviour
     [SerializeField] private int damage;
     private void OnTriggerEnter2D(Collider2D info)
     {
-        EnemiesController enemy = info.GetComponent<EnemiesController>();
+        EnemyControllerBase enemy = info.GetComponent<EnemyControllerBase>();
         if (enemy != null)
             enemy.TakeDamage(damage);
         else

@@ -188,14 +188,14 @@ public class Movement_controller : MonoBehaviour
         if(playerAnimator.GetBool("LightStrike"))
             for (int i = 0; i < colidersEnemiesLightAttack.Length; i++)
             {
-                EnemiesController enemy = colidersEnemiesLightAttack[i].GetComponent<EnemiesController>();
+                EnemyControllerBase enemy = colidersEnemiesLightAttack[i].GetComponent<EnemyControllerBase>();
                    enemy.TakeDamage(lightDamage);
                 
             }
         else if (playerAnimator.GetBool("PowerStrike"))
             for (int i = 0; i < colidersEnemiesPowerAttack.Length; i++)
             {
-                EnemiesController enemy = colidersEnemiesPowerAttack[i].GetComponent<EnemiesController>();
+                EnemyControllerBase enemy = colidersEnemiesPowerAttack[i].GetComponent<EnemyControllerBase>();
                 enemy.TakeDamage(PowerDamage * (holdTime < 0.5 ? 1 : (holdTime < 1 ? 2 : (holdTime < 1.5 ? 3 : (holdTime <= 2 ? 4 : 1)))));
             }
     }

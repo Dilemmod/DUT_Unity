@@ -25,7 +25,6 @@ public class EnemyArcherController : EnemyControllerBase
     {
         base.ResetState();
         enemyAnimator.SetBool(EnemyState.Shoot.ToString(), false);
-        enemyAnimator.SetBool(EnemyState.Hurt.ToString(), false);
     }
     protected override void Update()
     {
@@ -79,6 +78,10 @@ public class EnemyArcherController : EnemyControllerBase
         {
             case EnemyState.Shoot:
                 attacking = true;
+                enemyRb.velocity = Vector2.zero;
+                break;
+            case EnemyState.Hit:
+                attacking = false;
                 enemyRb.velocity = Vector2.zero;
                 break;
         }
