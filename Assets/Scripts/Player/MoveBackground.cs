@@ -4,8 +4,6 @@ using UnityEngine;
 
 public class MoveBackground : MonoBehaviour
 {
-
-
 	[SerializeField] private Rigidbody2D playerRB;
 	[SerializeField] private float speed;
 	private float ObjectPositionX;
@@ -16,7 +14,7 @@ public class MoveBackground : MonoBehaviour
 	private float LeftRespownPoint = -9f;
 
 
-    private void Start()
+    void Start()
     {
 		transform.position = new Vector2(transform.position.x + playerRB.transform.position.x, transform.position.y);
 	}

@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class EnemyMushroomController : EnemyControllerBase
 {
-    [SerializeField] private int damage;
     [SerializeField] protected float angerRange;
     private PlayerController player;
     protected override void Start()
@@ -29,15 +28,8 @@ public class EnemyMushroomController : EnemyControllerBase
             return;
         if (Vector2.Distance(transform.position, player.transform.position) < angerRange)
         {
-            Debug.Log("Boom");
             ChangeState(EnemyState.Death);
         }
-    }
-
-    private void BeginBoom()
-    {
-        player.ChangeHP(-damage);
-       // player.transform.position = new Vector2(player.transform.position.x - 0.4f, player.transform.position.y);
     }
     private void EndBoom()
     {

@@ -28,11 +28,11 @@ public abstract class EnemyControllerBase : MonoBehaviour
     protected EnemyState _currentState;
     protected float lastStateChange;
     protected float timeToNextChange;
-    /*
+    
     [Header("Damage dealer")]
     [SerializeField] private DamageType collisionDamageType;
     [SerializeField] protected int collisionDamage;
-    [SerializeField] protected float collisionTimeDelay;*/
+    [SerializeField] protected float collisionTimeDelay;
     private float lastDamageTime;
 
     #region UnityMethods
@@ -47,7 +47,19 @@ public abstract class EnemyControllerBase : MonoBehaviour
         if (Time.time - lastStateChange > timeToNextChange)
             GetRandomState();
     }
-
+    protected virtual void OnCollisionEnter2D(Collision2D collision)
+    {
+        TryToDamage(collision.collider);
+    }
+    protected virtual void TryToDamage(Collider2D enemy)
+    {
+        if ((Time.time - lastDamageTime) < collisionTimeDelay)
+            return;
+        PlayerController player = enemy.GetComponent<PlayerController>();
+        if (player != null)
+            player.TakeDamage(collisionDamage, collisionDamageType, transform);
+            
+    }
     protected virtual void FixedUpdate()
     {
         if (IsGroundEnding())
@@ -124,12 +136,6 @@ public enum EnemyState
     PowerStrike,
     Hurt,
     Death,
-}
-public enum DamageType
-{
-    Casual,
-    PowerStrike,
-    Projectile,
 }
 
 

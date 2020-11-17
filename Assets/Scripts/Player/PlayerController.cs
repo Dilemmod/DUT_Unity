@@ -10,12 +10,17 @@ public class PlayerController : MonoBehaviour
     private int currentHP;
     [SerializeField] private float SecondsToRegenerateStamina;
     [SerializeField] private int maxSP;
+    Movement_controller playerMovment;
     private int currentSP;
     private DateTime beginCountSP;
+
+    private bool canBeDamaged=true;
 
     void Start()
     {
         playerAnimator = GetComponent<Animator>();
+        playerMovment = GetComponent<Movement_controller>();
+        playerMovment.OnGetHurt += OnGetHurt;
         currentSP = maxSP;
         currentHP = maxHP;
     }
@@ -43,17 +48,32 @@ public class PlayerController : MonoBehaviour
         }
         
     }
-    public void ChangeHP(int value)
+    public void TakeDamage(int damage, DamageType type = DamageType.Casual,Transform enemy=null)
     {
-        if(value<0)
-            playerAnimator.SetTrigger("Hit");
+        if (!canBeDamaged)
+            return;
+        currentHP -= damage;
+        if (currentHP <= 0)
+            playerAnimator.SetBool("Death",true);
+        switch (type)
+        {
+            case DamageType.PowerStrike:
+                playerMovment.GetHurt(enemy.position);
+                break;
+        }
+        Debug.Log("Damage = " + damage);
+        Debug.Log("HP = " + currentHP);
+    }
+    private void OnGetHurt(bool canBeDamaged)
+    {
+        this.canBeDamaged = canBeDamaged;
+    }
+    public void RestoredHP(int value)
+    {
         currentHP += value;
         if (currentHP > maxHP)
             currentHP = maxHP;
-        else if (currentHP <= 0)
-            //playerAnimator.SetTrigger("Died");
         Debug.Log("HP = " + currentHP);
-
     }
     public bool ChangeSP(int value)
     {

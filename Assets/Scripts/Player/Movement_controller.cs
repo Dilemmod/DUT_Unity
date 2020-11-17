@@ -1,16 +1,15 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System;
 using UnityEngine;
-
-
-
 
 [RequireComponent(typeof(Rigidbody2D), typeof(Animator))]
 public class Movement_controller : MonoBehaviour
 {
-    private  Rigidbody2D playerRB;
+    public event Action<bool> OnGetHurt = delegate { };
+
+    private Rigidbody2D playerRB;
     private Animator playerAnimator;
     private PlayerController playerController;
+    private Transform checkPoint;
 
     [Header("Horizontal movement")]
     [SerializeField] private float speed;
@@ -28,9 +27,6 @@ public class Movement_controller : MonoBehaviour
     [SerializeField] private Collider2D topPlayerCollider;
     private bool canStand;
     private bool canRoll = true;
-
-    [Header("Enemies")]
-    [SerializeField] private LayerMask enemies;
 
     [Header("Casting")]
     [SerializeField] private Transform swordPoint;
@@ -52,10 +48,16 @@ public class Movement_controller : MonoBehaviour
     [SerializeField] private int PowerDamage;
     [SerializeField] private float minChargeTime;
     [SerializeField] private float maxChargeTime;
-    [SerializeField] private int powerStrikeCost;
     public float MaxChargeTime => maxChargeTime;
+    [SerializeField] private int powerStrikeCost;
+
+    [Header("Enemies")]
+    [SerializeField] private LayerMask enemies;
+    [SerializeField] private float pushForce;
+    private float lastHurtTime;
     private float holdTime=0;
     private bool died=false;
+    private bool canMove = true;
 
     void Start()
     {
@@ -63,9 +65,12 @@ public class Movement_controller : MonoBehaviour
         playerAnimator = GetComponent<Animator>();
         playerController = GetComponent<PlayerController>();
     }
-    
-    
-    
+    private void FixedUpdate()
+    {
+        grounded = Physics2D.OverlapCircle(groundCheck.position, radius, whatIsGround);
+            if (playerAnimator.GetBool("Hit") && grounded && Time.time - lastHurtTime > 0.5f) 
+            EndHurt();
+    }
     private void OnDrawGizmos()
     {
         Gizmos.DrawWireSphere(groundCheck.position, radius);
@@ -83,8 +88,10 @@ public class Movement_controller : MonoBehaviour
     }
     public void Move(float move, bool jump, bool roll)
     {
+        if (!canMove)
+            return;
         #region Movement
-        if (move != 0 && grounded && canRoll&& !isCasting&&!isStrike&& !died)
+        if (move != 0 && grounded &&!roll&& !isCasting&&!isStrike&& !died)
             playerRB.velocity = new Vector2(speed * move, playerRB.velocity.y);
 
         if (move > 0 && !faceRight)
@@ -93,7 +100,7 @@ public class Movement_controller : MonoBehaviour
             Flip();
         #endregion
         #region Jumping
-        grounded = Physics2D.OverlapCircle(groundCheck.position, radius, whatIsGround);
+      
         if (jump && grounded && canRoll)
         {
             playerAnimator.SetTrigger("Jump");
@@ -157,6 +164,7 @@ public class Movement_controller : MonoBehaviour
     {
         if (isStrike)
             return;
+
         this.holdTime = holdTime;
         if (holdTime >= minChargeTime)
         {
@@ -200,9 +208,48 @@ public class Movement_controller : MonoBehaviour
         isStrike = false;
     }
     #endregion
+    private void ResetPlayer()
+    {
+        playerAnimator.SetBool("Strike", false);
+        playerAnimator.SetBool("PowerStrike", false);
+        playerAnimator.SetBool("Casting", false);
+        playerAnimator.SetBool("Hit", false);
+        playerAnimator.SetBool("Death", false);
+        isCasting = false;
+        isStrike = false;
+        canMove = true;
+    }
+    public void GetHurt(Vector2 position)
+    {
+        lastHurtTime = Time.time;
+        canMove = false;
+        OnGetHurt(false);
+        Vector2 pushDirection = new Vector2();
+        pushDirection.x = position.x > transform.position.x ? -1 : 1;
+        pushDirection.y = 1;
+        playerAnimator.SetBool("Hit", true);
+        playerRB.AddForce(pushDirection * pushForce, ForceMode2D.Impulse);
+    }
+    private void EndHurt()
+    {
+        ResetPlayer();
+        OnGetHurt(true);
+    }
+    public void SetCheckPoint(Transform checkPoint)
+    {
+        this.checkPoint = checkPoint;
+    }
     public void OnDeath()
     {
         died = true;
-        Destroy(gameObject);
+        //Time.timeScale = 1;
+        if (checkPoint != null)
+            gameObject.transform.position = checkPoint.position;
+        else
+            gameObject.transform.position = new Vector2(0, 0);
+
+        ResetPlayer();
+        playerController.RestoredHP(100);
+        died = false;
     }
 }

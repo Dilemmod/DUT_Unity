@@ -75,6 +75,8 @@
     <Compile Include="Assets\Scripts\Enemies\EnemyMushroomController.cs" />
     <Compile Include="Assets\Scripts\Enemies\EnemyProjectileController.cs" />
     <Compile Include="Assets\Scripts\Enemies\Traps\VerticalMiover.cs" />
+    <Compile Include="Assets\Scripts\Helper.cs" />
+    <Compile Include="Assets\Scripts\Items\CheckPointPicker.cs" />
     <Compile Include="Assets\Scripts\Items\ItemPicker.cs" />
     <Compile Include="Assets\Scripts\Player\MoveBackground.cs" />
     <Compile Include="Assets\Scripts\Player\Movement_controller.cs" />

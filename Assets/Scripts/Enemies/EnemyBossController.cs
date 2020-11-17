@@ -46,11 +46,13 @@ public class EnemyBossController : EnemyArcherController
         Gizmos.DrawWireCube(strikePoint.position, new Vector3(strikeRange, strikeRange, 0));
     }
     #endregion
+    #region State
     protected override void ChangeState(EnemyState state)
     {
-        base.ChangeState(state);
-
-        switch (currentState)
+        if (currentState == state)
+            return;
+        //currentState
+        switch (state)
         {
             case EnemyState.PowerStrike:
             case EnemyState.Strike:
@@ -60,8 +62,9 @@ public class EnemyBossController : EnemyArcherController
                 if (!CanAttack())
                 {
                     stateOnHold = state;
-                    enemyAnimator.SetBool(currentState.ToString(), false);
-                    ChangeState(EnemyState.Move);
+                    state = EnemyState.Move;
+                    //enemyAnimator.SetBool(currentState.ToString(), false);
+                    //ChangeState(EnemyState.Move);
                 }
                 break;
             case EnemyState.Hurt:
@@ -69,8 +72,8 @@ public class EnemyBossController : EnemyArcherController
                 enemyRb.velocity = Vector2.zero;
                 StopAllCoroutines();
                 break;
-
         }
+        base.ChangeState(state);
     }
     private bool CanAttack()
     {
@@ -90,9 +93,10 @@ public class EnemyBossController : EnemyArcherController
                 break;
         }
     }
-
+    
     protected override void EndState()
     {
+        base.EndState();
         switch (currentState)
         {
             case EnemyState.PowerStrike:
@@ -106,15 +110,20 @@ public class EnemyBossController : EnemyArcherController
                 fightStarted = false;
                 break;
         }
-
-        base.EndState();
-
-        if (currentState == EnemyState.Shoot || currentState == EnemyState.PowerStrike || currentState == EnemyState.Strike || currentState == EnemyState.Hurt)
-        {
+       // if (currentState == EnemyState.Shoot || currentState == EnemyState.PowerStrike || currentState == EnemyState.Strike || currentState == EnemyState.Hurt)
+       // {
             StartCoroutine(BeginNewCircle());
-        }
+      //  }
     }
+    #endregion
     #region StateMetods
+
+    protected override void TryToDamage(Collider2D enemy)
+    {
+        if (currentState == EnemyState.Idle)
+            return;
+        base.TryToDamage(enemy);
+    }
     protected void Strike()
     {
         Collider2D player = Physics2D.OverlapBox(strikePoint.position, new Vector2(strikeRange, strikeRange), 0, enemies);
@@ -122,7 +131,7 @@ public class EnemyBossController : EnemyArcherController
         {
             PlayerController playerControler = player.GetComponent<PlayerController>();
             if (playerControler != null)
-                playerControler.ChangeHP(-strikeDamage);
+                playerControler.TakeDamage(strikeDamage);
         }
     }
 
@@ -138,8 +147,33 @@ public class EnemyBossController : EnemyArcherController
         enemyRb.velocity = Vector2.zero;
     }
     #endregion
+    #region Circle
+    private IEnumerator BeginNewCircle()
+    {
+        if (currentState == EnemyState.Death)
+            yield break;
+
+        if (fightStarted)
+        {
+            //isAngry = false;
+            isAngry = false;
+            ChangeState(EnemyState.Idle);
+            CheckPlayerInRange();
+            if (!isAngry)
+            {
+                fightStarted = false;
+                StartCoroutine(ScanForPlayer());
+                yield break;
+            }
+            yield return new WaitForSeconds(waitTime);
+        }
+        fightStarted = true;
+        TurnToPlayer();
+        ChooseNextAttackState();
+    }
     protected override void CheckPlayerInRange()
     {
+        //if (player == null || isAngry)
         if (player == null || isAngry)
             return;
 
@@ -155,34 +189,12 @@ public class EnemyBossController : EnemyArcherController
         else
             isAngry = false;
     }
-
-    private IEnumerator BeginNewCircle()
-    {
-        if (currentState == EnemyState.Death)
-            yield break;
-
-        if (fightStarted)
-        {
-            //isAngry = false;
-            ChangeState(EnemyState.Idle);
-            CheckPlayerInRange();
-            if (!isAngry)
-            {
-                fightStarted = false;
-                StartCoroutine(ScanForPlayer());
-                yield break;
-            }
-            yield return new WaitForSeconds(waitTime);
-        }
-        fightStarted = true;
-        TurnToPlayer();
-        ChooseNextAttackState();
-    }
     protected void ChooseNextAttackState()
     {
         int state = Random.Range(0, attackStates.Length);
         ChangeState(attackStates[state]);
     }
+    #endregion
     /*
 public override void TakeDamage(int damage, DamageType type = DamageType.Casual, Transform palyer = null)
 {

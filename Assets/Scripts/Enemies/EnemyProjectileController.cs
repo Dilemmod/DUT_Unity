@@ -9,7 +9,7 @@ public class EnemyProjectileController : MonoBehaviour
     {
         PlayerController player = info.GetComponent<PlayerController>();
         if (player != null)
-            player.ChangeHP(-damage);
+            player.TakeDamage(damage);
         else
             return;
         Destroy(gameObject, 0.05f);
