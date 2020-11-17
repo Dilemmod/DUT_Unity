@@ -2,14 +2,17 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using UnityEngine.UI;
 
 public class PlayerController : MonoBehaviour
 {
     private Animator playerAnimator;
-    [SerializeField] private int maxHP;
     private int currentHP;
-    [SerializeField] private float SecondsToRegenerateStamina;
+    [SerializeField] private int maxHP;
+    [SerializeField] private Slider sliderHP;
     [SerializeField] private int maxSP;
+    [SerializeField] private Slider sliderSP;
+    [SerializeField] private float SecondsToRegenerateStamina;
     Movement_controller playerMovment;
     private int currentSP;
     private DateTime beginCountSP;
@@ -23,30 +26,20 @@ public class PlayerController : MonoBehaviour
         playerMovment.OnGetHurt += OnGetHurt;
         currentSP = maxSP;
         currentHP = maxHP;
+        sliderHP.maxValue = maxHP;
+        sliderHP.value = maxHP;
+        sliderSP.maxValue = maxSP;
+        sliderSP.value = maxSP;
+        StartCoroutine(IncreaseStaminaPoints());
     }
     private bool saver = false;
-    private void FixedUpdate()
+    protected IEnumerator IncreaseStaminaPoints()
     {
-        if (currentSP < 100)
+        while (true)
         {
-            TimerIncreasePoints();
-            if (!saver)
-            {
-                saver = true;
-                beginCountSP = DateTime.Now;
-            }
+            ChangeSP(1);
+            yield return new WaitForSeconds(SecondsToRegenerateStamina);
         }
-
-    }
-    private void TimerIncreasePoints()
-    {
-        float difference = (float)(DateTime.Now - beginCountSP).TotalSeconds;
-        if (difference > SecondsToRegenerateStamina)
-        {
-            ChangeSP(50);
-            beginCountSP = DateTime.Now;
-        }
-        
     }
     public void TakeDamage(int damage, DamageType type = DamageType.Casual,Transform enemy=null)
     {
@@ -61,8 +54,7 @@ public class PlayerController : MonoBehaviour
                 playerMovment.GetHurt(enemy.position);
                 break;
         }
-        Debug.Log("Damage = " + damage);
-        Debug.Log("HP = " + currentHP);
+        sliderHP.value = currentHP;
     }
     private void OnGetHurt(bool canBeDamaged)
     {
@@ -73,7 +65,7 @@ public class PlayerController : MonoBehaviour
         currentHP += value;
         if (currentHP > maxHP)
             currentHP = maxHP;
-        Debug.Log("HP = " + currentHP);
+        sliderHP.value = currentHP;
     }
     public bool ChangeSP(int value)
     {
@@ -82,7 +74,7 @@ public class PlayerController : MonoBehaviour
         currentSP += value;
         if (currentSP > maxSP)
             currentSP = maxSP;
-        Debug.Log("currentSP = " + currentSP);
+        sliderSP.value = currentSP;
         return true;
     }
 }

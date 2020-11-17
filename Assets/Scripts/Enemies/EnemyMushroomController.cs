@@ -18,7 +18,7 @@ public class EnemyMushroomController : EnemyControllerBase
         while (true)
         {
             CheckPlayerInRange();
-            yield return new WaitForSeconds(0.5f);
+            yield return new WaitForSeconds(0.1f);
         }
 
     }
@@ -28,6 +28,7 @@ public class EnemyMushroomController : EnemyControllerBase
             return;
         if (Vector2.Distance(transform.position, player.transform.position) < angerRange)
         {
+            player.TakeDamage(collisionDamage, DamageType.PowerStrike, transform);
             ChangeState(EnemyState.Death);
         }
     }
