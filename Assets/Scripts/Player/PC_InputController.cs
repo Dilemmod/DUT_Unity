@@ -1,7 +1,6 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using System;
+using UnityEngine.EventSystems;
 
 [RequireComponent(typeof(Movement_controller))]
 public class PC_InputController : MonoBehaviour
@@ -25,25 +24,32 @@ public class PC_InputController : MonoBehaviour
         roll = Input.GetKey(KeyCode.LeftShift);
         if (Input.GetKey(KeyCode.E))
             playerMovement.StartCasting();
-        if (Input.GetButtonDown("Fire1"))
+
+        if (!IsPointerOverUI())
         {
-            strikeClickTime = DateTime.Now;
-            canAttack = true;
-        }    
-        if (Input.GetButtonUp("Fire1"))
-        {
-            float holdrtime = (float)(DateTime.Now-strikeClickTime).TotalSeconds;
-            if(canAttack)
-                playerMovement.StartStrike(holdrtime);
-            canAttack = false;
+            if (Input.GetButtonDown("Fire1"))
+            {
+                strikeClickTime = DateTime.Now;
+                canAttack = true;
+            }
+            if (Input.GetButtonUp("Fire1"))
+            {
+                float holdrtime = (float)(DateTime.Now - strikeClickTime).TotalSeconds;
+                if (canAttack)
+                    playerMovement.StartStrike(holdrtime);
+                canAttack = false;
+            }
         }
-        if ((DateTime.Now - strikeClickTime).TotalSeconds >= playerMovement.MaxChargeTime && canAttack) 
-        {
-            playerMovement.StartStrike(playerMovement.MaxChargeTime);
-            canAttack = false;
-        }
+        if ((DateTime.Now - strikeClickTime).TotalSeconds >= playerMovement.MaxChargeTime && canAttack)
+            {
+                playerMovement.StartStrike(playerMovement.MaxChargeTime);
+                canAttack = false;
+            }
 
     }
+
+    private bool IsPointerOverUI() => EventSystem.current.IsPointerOverGameObject();
+
     private void FixedUpdate()
     {
         playerMovement.Move(move, jump, roll);

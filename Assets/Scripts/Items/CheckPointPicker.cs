@@ -6,7 +6,7 @@ public class CheckPointPicker : MonoBehaviour
 {
     private void OnTriggerEnter2D(Collider2D info)
     {
-        info.GetComponent<Movement_controller>().SetCheckPoint(gameObject.transform);
+        info.GetComponent<PlayerController>().SetCheckPoint(gameObject.transform);
         gameObject.SetActive(false);
     }
 }

@@ -9,7 +9,6 @@ public class Movement_controller : MonoBehaviour
     private Rigidbody2D playerRB;
     private Animator playerAnimator;
     private PlayerController playerController;
-    private Transform checkPoint;
 
     [Header("Horizontal movement")]
     [SerializeField] private float speed;
@@ -208,7 +207,7 @@ public class Movement_controller : MonoBehaviour
         isStrike = false;
     }
     #endregion
-    private void ResetPlayer()
+    public void ResetPlayer()
     {
         playerAnimator.SetBool("Strike", false);
         playerAnimator.SetBool("PowerStrike", false);
@@ -234,22 +233,5 @@ public class Movement_controller : MonoBehaviour
     {
         ResetPlayer();
         OnGetHurt(true);
-    }
-    public void SetCheckPoint(Transform checkPoint)
-    {
-        this.checkPoint = checkPoint;
-    }
-    public void OnDeath()
-    {
-        died = true;
-        //Time.timeScale = 1;
-        if (checkPoint != null)
-            gameObject.transform.position = checkPoint.position;
-        else
-            gameObject.transform.position = new Vector2(0, 0);
-
-        ResetPlayer();
-        playerController.RestoredHP(100);
-        died = false;
     }
 }

@@ -219,7 +219,7 @@ public class EnemyBossController : EnemyArcherController
     protected override void onDeath()
     {
         if(inRage)
-        enemySpryte.color = Color.white;
+            enemySpryte.color = Color.white;
         base.onDeath();
     }
 

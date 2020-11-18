@@ -6,6 +6,7 @@ using UnityEngine.UI;
 
 public class PlayerController : MonoBehaviour
 {
+    private LevelManager levelManager;
     private Animator playerAnimator;
     private int currentHP;
     [SerializeField] private int maxHP;
@@ -15,7 +16,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float SecondsToRegenerateStamina;
     Movement_controller playerMovment;
     private int currentSP;
-    private DateTime beginCountSP;
+    Transform checkPoint;
 
     private bool canBeDamaged=true;
 
@@ -23,6 +24,8 @@ public class PlayerController : MonoBehaviour
     {
         playerAnimator = GetComponent<Animator>();
         playerMovment = GetComponent<Movement_controller>();
+        levelManager = LevelManager.Instance;
+
         playerMovment.OnGetHurt += OnGetHurt;
         currentSP = maxSP;
         currentHP = maxHP;
@@ -30,6 +33,7 @@ public class PlayerController : MonoBehaviour
         sliderHP.value = maxHP;
         sliderSP.maxValue = maxSP;
         sliderSP.value = maxSP;
+        //checkPoint = transform;
         StartCoroutine(IncreaseStaminaPoints());
     }
     private bool saver = false;
@@ -76,5 +80,21 @@ public class PlayerController : MonoBehaviour
             currentSP = maxSP;
         sliderSP.value = currentSP;
         return true;
+    }
+    public void SetCheckPoint(Transform checkPoint)
+    {
+        this.checkPoint = checkPoint;
+    }
+    public void OnDeath()
+    {
+        if (checkPoint == null)
+        {
+            levelManager.Restart();
+            return;
+        }
+        gameObject.transform.position = checkPoint.position;
+        playerMovment.ResetPlayer();
+        currentHP = maxHP;
+        currentSP = maxSP;
     }
 }

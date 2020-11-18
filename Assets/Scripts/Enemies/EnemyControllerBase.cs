@@ -68,7 +68,7 @@ public abstract class EnemyControllerBase : MonoBehaviour
         ChangeState(EnemyState.Hit);
         if(hpSlider!=null)
         hpSlider.value = currentHp;
-        Debug.Log(String.Format("Enemy {0} take damage {1} and his currentHp = {2}", gameObject, damage, currentHp));
+        //Debug.Log(String.Format("Enemy {0} take damage {1} and his currentHp = {2}", gameObject, damage, currentHp));
         if (currentHp <= 0)
         {
             currentHp = 0;
