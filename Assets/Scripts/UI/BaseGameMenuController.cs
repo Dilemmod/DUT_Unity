@@ -22,13 +22,13 @@ public class BaseGameMenuController : MonoBehaviour
     {
         quit.onClick.RemoveListener(levelManager.Quit);
     }
-    protected virtual void ChangeMenuStatus()
-    {
-        menu.SetActive(!menu.activeInHierarchy);
-    }
     protected virtual void Update()
     {
         if (Input.GetKeyUp(KeyCode.Escape))
-            ChangeMenuStatus();
+            OnChangeMenuStatusClicked();
+    }
+    protected virtual void OnChangeMenuStatusClicked()
+    {
+        menu.SetActive(!menu.activeInHierarchy);
     }
 }

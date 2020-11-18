@@ -11,22 +11,44 @@ public class MainMenuController : BaseGameMenuController
 
     [SerializeField] private GameObject levelMenu;
     [SerializeField] protected Button closeMenu;
+
+    private int lvl=1;
+
     protected override void Start()
     {
         base.Start();
-        chooseLevel.onClick.AddListener(UseLvlMenu);
-        closeMenu.onClick.AddListener(UseLvlMenu);
+        chooseLevel.onClick.AddListener(OnLvlMenuClecked);
+        closeMenu.onClick.AddListener(OnLvlMenuClecked);
+        play.onClick.AddListener(OnPlayClicked);
+        reset.onClick.AddListener(OnResetClicked);
+        //PlayerPrefs.DeleteAll();
+        if (PlayerPrefs.HasKey(GamePrefs.LastPlayedLvl.ToString()))
+        {
+            play.GetComponentInChildren<Text>().text = "CONTINUE";
+            lvl = PlayerPrefs.GetInt(GamePrefs.LastPlayedLvl.ToString());
+        }
     }
     protected override void OnDestroy()
     {
         base.OnDestroy();
-        chooseLevel.onClick.RemoveListener(UseLvlMenu);
-        closeMenu.onClick.RemoveListener(UseLvlMenu);
+        reset.onClick.RemoveListener(levelManager.ResetProgres);
+        chooseLevel.onClick.RemoveListener(OnLvlMenuClecked);
+        closeMenu.onClick.RemoveListener(OnLvlMenuClecked);
+        play.onClick.RemoveListener(OnPlayClicked);
     }
-    private void UseLvlMenu()
+    private void OnLvlMenuClecked()
     {
         levelMenu.SetActive(!levelMenu.activeInHierarchy);
-        ChangeMenuStatus();
+        OnChangeMenuStatusClicked();
+    }
+    private void OnResetClicked()
+    {
+        play.GetComponentInChildren<Text>().text = "NEW GAME";
+        levelManager.ResetProgres();
+    }
+    private void OnPlayClicked()
+    {
+        levelManager.ChangeLvl(lvl);
     }
 
     protected override void Update()

@@ -10,16 +10,26 @@ public class LevelButtonController : MonoBehaviour
     void Start()
     {
         button = GetComponent<Button>();
-        button.onClick.AddListener(ChangeLevel);
+        button.transform.GetChild(1).GetComponent<Image>().enabled = false;
         GetComponentInChildren<Text>().text = ((int)scene).ToString();
+        if (!PlayerPrefs.HasKey(GamePrefs.LvlPlayed.ToString() + ((int)scene).ToString()))
+        {
+            button.transform.GetChild(1).GetComponent<Image>().enabled = true;
+            button.interactable = false;
+            return;
+        }
+        button.onClick.AddListener(OnChangeLevelClicked);
+    }
+    private void OnDestroy()
+    {
+        button.onClick.RemoveAllListeners();
     }
 
-    // Update is called once per frame
     void Update()
     {
         
     }
-    void ChangeLevel()
+    void OnChangeLevelClicked()
     {
         LevelManager.Instance.ChangeLvl((int)scene);
     }

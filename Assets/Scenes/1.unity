@@ -6924,12 +6924,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8334482817e76524e8f1fbfe5fad07cc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  menu: {fileID: 0}
-  play: {fileID: 0}
-  settings: {fileID: 0}
-  quit: {fileID: 0}
-  restart: {fileID: 0}
-  backToMenu: {fileID: 0}
+  menu: {fileID: 175495593}
+  play: {fileID: 180416806}
+  settings: {fileID: 1049599226}
+  quit: {fileID: 236055004}
+  restart: {fileID: 525166247}
+  backToMenu: {fileID: 1708916910}
 --- !u!1 &2062016478
 GameObject:
   m_ObjectHideFlags: 0

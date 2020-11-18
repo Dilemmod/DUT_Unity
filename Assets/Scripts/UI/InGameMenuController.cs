@@ -13,24 +13,24 @@ public class InGameMenuController : BaseGameMenuController
     {
         base.Start();
 
-        play.onClick.AddListener(ChangeMenuStatus);
+        play.onClick.AddListener(OnChangeMenuStatusClicked);
         restart.onClick.AddListener(levelManager.Restart);
-        backToMenu.onClick.AddListener(GoToMainMenu);
+        backToMenu.onClick.AddListener(OnGoToMainMenuClicked);
 
     }
     protected override void OnDestroy()
     {
         base.OnDestroy();
-        play.onClick.RemoveListener(ChangeMenuStatus);
+        play.onClick.RemoveListener(OnChangeMenuStatusClicked);
         restart.onClick.RemoveListener(levelManager.Restart);
-        backToMenu.onClick.RemoveListener(GoToMainMenu);
+        backToMenu.onClick.RemoveListener(OnGoToMainMenuClicked);
     }
-    protected override void ChangeMenuStatus()
+    protected override void OnChangeMenuStatusClicked()
     {
-        base.ChangeMenuStatus();
+        base.OnChangeMenuStatusClicked();
         Time.timeScale =(menu.activeInHierarchy ? 0 : 1);
     }
-    public void GoToMainMenu()
+    public void OnGoToMainMenuClicked()
     {
         LevelManager.Instance.ChangeLvl((int)Scenes.MainMenu);
     }
