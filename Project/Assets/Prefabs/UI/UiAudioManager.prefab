@@ -1,0 +1,88 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &3336263599434696655
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1514628185737809989}
+  - component: {fileID: 2983074139922631100}
+  m_Layer: 5
+  m_Name: UiAudioManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &1514628185737809989
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3336263599434696655}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 2.913505, y: 2.913505, z: 2.913505}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: -959.99994, y: -540.4552}
+  m_SizeDelta: {x: 100, y: 100}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &2983074139922631100
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3336263599434696655}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f834fdea0dffb9b4dba3e01c0237689b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sounds:
+  - AudioClip: {fileID: 8300000, guid: 7a85462e43e9b7c4aaee2527b53f2a98, type: 3}
+    Volume: 0.1
+    Pitch: 3
+    Loop: 0
+    ClipName: 0
+    AudioSource: {fileID: 0}
+  - AudioClip: {fileID: 8300000, guid: 7a85462e43e9b7c4aaee2527b53f2a98, type: 3}
+    Volume: 0.1
+    Pitch: 2
+    Loop: 0
+    ClipName: 1
+    AudioSource: {fileID: 0}
+  - AudioClip: {fileID: 8300000, guid: 7a85462e43e9b7c4aaee2527b53f2a98, type: 3}
+    Volume: 0.1
+    Pitch: 1
+    Loop: 0
+    ClipName: 2
+    AudioSource: {fileID: 0}
+  - AudioClip: {fileID: 8300000, guid: 7a85462e43e9b7c4aaee2527b53f2a98, type: 3}
+    Volume: 0.1
+    Pitch: 3
+    Loop: 0
+    ClipName: 3
+    AudioSource: {fileID: 0}
+  - AudioClip: {fileID: 8300000, guid: 7a85462e43e9b7c4aaee2527b53f2a98, type: 3}
+    Volume: 0.1
+    Pitch: 3
+    Loop: 0
+    ClipName: 4
+    AudioSource: {fileID: 0}
+  - AudioClip: {fileID: 8300000, guid: d79e12e15946f034eb8397feebfc1cab, type: 3}
+    Volume: 0.6
+    Pitch: 1
+    Loop: 1
+    ClipName: 5
+    AudioSource: {fileID: 0}
+  audioMixerGroup: {fileID: 24300002, guid: b12094e76cc45e74b855809ffd1d8d60, type: 2}
