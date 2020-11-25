@@ -14,10 +14,11 @@ public class EnemyArcherController : EnemyControllerBase
 
     protected bool isAngry;
     protected bool attacking;
+    private AudioSource audioSource;
     protected override void Start()
     {
         base.Start();
-        //angerRange = range;
+        audioSource = GetComponent<AudioSource>();
         player = FindObjectOfType<PlayerController>();
         StartCoroutine(ScanForPlayer());
     }
@@ -31,6 +32,10 @@ public class EnemyArcherController : EnemyControllerBase
         if (isAngry)
             return;
         base.Update();
+    }
+    private void SoundOnShoot()
+    {
+        audioSource.Play();
     }
     protected void Shoot()
     {

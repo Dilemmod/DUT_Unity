@@ -17,6 +17,7 @@ public class PlayerController : MonoBehaviour
     Movement_controller playerMovment;
     private int currentSP;
     Transform checkPoint;
+    [SerializeField] private InGameMenuController inGameMenuController;
 
     private bool canBeDamaged=true;
 
@@ -33,7 +34,6 @@ public class PlayerController : MonoBehaviour
         sliderHP.value = maxHP;
         sliderSP.maxValue = maxSP;
         sliderSP.value = maxSP;
-        //checkPoint = transform;
         StartCoroutine(IncreaseStaminaPoints());
     }
     private bool saver = false;
@@ -87,6 +87,10 @@ public class PlayerController : MonoBehaviour
     }
     public void OnDeath()
     {
+        Destroy(sliderSP);
+        Destroy(sliderHP);
+        inGameMenuController.OnPlayerDeath();
+        /*
         if (checkPoint == null)
         {
             levelManager.Restart();
@@ -96,5 +100,6 @@ public class PlayerController : MonoBehaviour
         playerMovment.ResetPlayer();
         currentHP = maxHP;
         currentSP = maxSP;
+        */
     }
 }

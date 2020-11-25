@@ -1,0 +1,9 @@
+Assembly-CSharp.csproj
+Project/Logs/
+Project/Library/
+Project/obj/
+Project/Temp Sprites/
+Project/UIElementsSchema/
+.vs
+Project.sln
+2D_platformer.sln

@@ -6,19 +6,24 @@ public class EnemyMushroomController : EnemyControllerBase
 {
     [SerializeField] protected float angerRange;
     private PlayerController player;
+    private AudioSource audioSource;
     protected override void Start()
     {
         base.Start();
-
+        audioSource = GetComponent<AudioSource>();
         player = FindObjectOfType<PlayerController>();
         StartCoroutine(ScanForPlayer());
+    }
+    public void SoundBoom()
+    {
+        audioSource.Play();
     }
     protected IEnumerator ScanForPlayer()
     {
         while (true)
         {
             CheckPlayerInRange();
-            yield return new WaitForSeconds(0.4f);
+            yield return new WaitForSeconds(0.1f);
         }
 
     }

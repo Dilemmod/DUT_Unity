@@ -21,13 +21,15 @@ public class MainMenuController : BaseGameMenuController
         play.onClick.AddListener(OnPlayClicked);
         reset.onClick.AddListener(OnResetClicked);
 
-        audioManager.Play(UIClipName.BackgroundMusic);
+       
         
         if (PlayerPrefs.HasKey(GamePrefs.LastPlayedLvl.ToString()))
         {
             play.GetComponentInChildren<Text>().text = "CONTINUE";
             lvl = PlayerPrefs.GetInt(GamePrefs.LastPlayedLvl.ToString());
         }
+
+        audioManager.Play(UIClipName.BackgroundMusic);
     }
     protected override void Update() { }
     protected override void OnDestroy()

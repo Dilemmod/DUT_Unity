@@ -2,8 +2,20 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemyGoblinController : EnemyBossController
+public class EnemyGoblinController : EnemyControllerBase
 {
+    [Header("Strike")]
+    [SerializeField] private Transform strikePoint;
+    [SerializeField] private int strikeDamage;
+    [SerializeField] private float strikeRange;
+    [SerializeField] private LayerMask enemies;
+
+    [Header("PowerStrike")]
+    [SerializeField] private Collider2D strikeCollider;
+    [SerializeField] private int powerStrikeDamage;
+    [SerializeField] private float powerStrikeRange;
+    [SerializeField] private float powerStrikeSpeed;
+    /*
     protected override void AttackStates()
     {
         attackStates.Add(EnemyState.Strike);
@@ -14,6 +26,7 @@ public class EnemyGoblinController : EnemyBossController
         inRage = true;
         base.TakeDamage(damage);
     }
+    */
     /*
     [Header("Strike2")]
     [SerializeField] private Transform strikePoint2;

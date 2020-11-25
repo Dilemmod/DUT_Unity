@@ -59,7 +59,16 @@ public class Movement_controller : MonoBehaviour
     private bool died=false;
     private bool canMove = true;
 
-    [Header("Audio")]
+    [Header("AudioSource")]
+    [SerializeField] public AudioSource audioBackGroundMusic;
+    [SerializeField] public AudioSource audioSwordPowerStrike;
+    [SerializeField] public AudioSource audioSwordStrike;
+    [SerializeField] public AudioSource audioRoll;
+    [SerializeField] public AudioSource audioJumpUp;
+    [SerializeField] public AudioSource audioJumpFall;
+    [SerializeField] public AudioSource audioGameOver;
+
+    [Header("AudioClip")]
     [SerializeField] public InGameSounds runClip;
     //[SerializeField] public InGameSounds backgroundClip;
     private InGameSounds currentSound;
@@ -71,7 +80,6 @@ public class Movement_controller : MonoBehaviour
         playerAnimator = GetComponent<Animator>();
         playerController = GetComponent<PlayerController>();
         audioSource = GetComponent<AudioSource>();
-        //PlayAudio(backgroundClip);
     }
     private void FixedUpdate()
     {
@@ -108,9 +116,13 @@ public class Movement_controller : MonoBehaviour
             Flip();
         #endregion
         #region Jumping
-      
+        if (playerRB.velocity.y < 0&&grounded)
+        {
+            SoundJumpFall();
+        }
         if (jump && grounded && canRoll)
         {
+            SoundJumpUp();
             playerAnimator.SetTrigger("Jump");
             playerRB.AddForce(Vector2.up * jumpForse);
             jump = false;
@@ -138,11 +150,41 @@ public class Movement_controller : MonoBehaviour
         playerAnimator.SetBool("Grounded", grounded);
         #endregion
         #region Audio run
-        if (grounded && playerRB.velocity.x != 0 && !audioSource.isPlaying)
+        if (grounded && playerRB.velocity.x != 0 && !audioSource.isPlaying&&canRoll)
             PlayAudio(runClip);
         else if (!grounded || playerRB.velocity.x == 0)
             StopAudio(runClip);
         #endregion
+    }
+    #region Sound of Action
+    private void SoundStrike()
+    {
+        audioSwordStrike.Play();
+    }
+    private void SoundPowerStrike()
+    {
+        audioSwordPowerStrike.Play();
+    }
+    private void SoundRoll()
+    {
+        audioRoll.Play();
+    }
+    private void SoundJumpUp()
+    {
+        audioJumpUp.Play();
+    }
+    private void SoundJumpFall()
+    {
+        audioJumpFall.Play();
+    }
+    private void OnDeathAnimation()
+    {
+        audioRoll.Stop();
+        audioJumpFall.Stop();
+        audioBackGroundMusic.Stop();
+        audioSource.Stop();
+        audioGameOver.Play();
+        canMove = false;
     }
     public void PlayAudio(InGameSounds sound)
     {
@@ -164,6 +206,7 @@ public class Movement_controller : MonoBehaviour
         audioSource.clip = null;
         currentSound = null;
     }
+    #endregion
     #region EndAnimation
     private void EndRoll()
     {
@@ -248,7 +291,6 @@ public class Movement_controller : MonoBehaviour
         playerAnimator.SetBool("PowerStrike", false);
         playerAnimator.SetBool("Casting", false);
         playerAnimator.SetBool("Hit", false);
-        playerAnimator.SetBool("Death", false);
         isCasting = false;
         isStrike = false;
         canMove = true;
